@@ -2,6 +2,13 @@
 //  OpenShift sample Node application
 var http = require('http');
 
+var MongoClient = require('mongodb').MongoClient;
+MongoClient.connect("mongodb://admin:8JfNsIYBuViV@127.4.207.1:27017/node01", function(err, db) {
+  if(!err) {
+    console.log("We are connected");
+  }
+});
+
 //Get the environment variables we need.
 var ipaddr  = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
 var port    = process.env.OPENSHIFT_NODEJS_PORT || 8080;
