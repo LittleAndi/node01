@@ -4,9 +4,15 @@ var http = require('http');
 var express = require('express');
 var app = express();
 
+//Get the environment variables we need.
+var ipaddr  = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
+var port    = process.env.OPENSHIFT_NODEJS_PORT || 8080;
+
 app.get('/wines', function(req, res) {
 	res.send([{name:'wine1'}, { name:'wine2'}]);
 });
+
+app.listen(port);
 
 var MongoClient = require('mongodb').MongoClient;
 MongoClient.connect("mongodb://admin:8JfNsIYBuViV@127.4.207.1:27017/node01", function(err, db) {
@@ -17,10 +23,6 @@ MongoClient.connect("mongodb://admin:8JfNsIYBuViV@127.4.207.1:27017/node01", fun
   	console.log(err);
   }
 });
-
-//Get the environment variables we need.
-var ipaddr  = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
-var port    = process.env.OPENSHIFT_NODEJS_PORT || 8080;
 
 http.createServer(function (req, res) {
 	var addr = "unknown";
