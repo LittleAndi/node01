@@ -53,9 +53,13 @@ var App = function(){
   // Webapp urls
 
   self.app  = express();
-  self.app.post('/names', self.routes['addNames']);
-  //self.app.get('/health', self.routes['health']);
+  self.app.configure(function() {
+  	app.use(express.logger('dev'));
+  	app.use(express.bodyParser());
+  });
+
   self.app.get('/', self.routes['root']);
+  self.app.post('/names', self.routes['addNames']);
 
   // Logic to open a database connection. We are going to call this outside of app so it is available to all our functions inside.
 
