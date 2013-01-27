@@ -7,11 +7,9 @@ var mongodb = require('mongodb');
 var App = function(){
 
   // Scope
-
   var self = this;
 
   // Setup
-  
   self.dbServer = new mongodb.Server(process.env.OPENSHIFT_MONGODB_DB_HOST, parseInt(process.env.OPENSHIFT_MONGODB_DB_PORT));
   self.db = new mongodb.Db(process.env.OPENSHIFT_APP_NAME, self.dbServer, {auto_reconnect: true});
   self.dbUser = process.env.OPENSHIFT_MONGODB_DB_USERNAME;
@@ -23,9 +21,6 @@ var App = function(){
   if (typeof self.ipaddr === "undefined") {
     console.warn('No OPENSHIFT_INTERNAL_IP environment variable');
   };
-  
-  
-   
 
   // Web app logic
   self.routes = {};
@@ -38,8 +33,8 @@ var App = function(){
     });
   };
 
-  self.routes['addNames'] = function(req, res){
-  	var name = req.body;
+  self.routes['addNames'] = function(req, res) {
+ 	var name = req.body;
   	console.log('Adding name: ' + JSON.stringify(name));
   	self.db.collection('names', function(err, collection) {
   		collection.insert(name, { safe: true }, function(err, result) {
@@ -56,12 +51,9 @@ var App = function(){
   // Webapp urls
 
   self.app  = express();
-  self.app.get('/health', self.routes['health']);
-  self.app.get('/', self.routes['root']);
   self.app.post('/names', self.routes['addNames']);
- 
-
-
+  //self.app.get('/health', self.routes['health']);
+  self.app.get('/', self.routes['root']);
 
   // Logic to open a database connection. We are going to call this outside of app so it is available to all our functions inside.
 
