@@ -47,7 +47,7 @@ var App = function(){
   			console.log('Success' + JSON.stringify(result[0]));
   			res.send(result[0]);
   		}
-  	}
+  	});
   };
 
     // Webapp urls
