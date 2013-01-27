@@ -55,7 +55,7 @@ var App = function(){
 
   // Webapp urls
 
-  self.app  = express.createServer();
+  self.app  = express();
   self.app.get('/health', self.routes['health']);
   self.app.get('/', self.routes['root']);
   self.app.post('/names', self.routes['addNames']);
