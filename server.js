@@ -1,6 +1,12 @@
 #!/bin/env node
 //  OpenShift sample Node application
 var http = require('http');
+var express = require('express');
+var app = express();
+
+app.get('/wines', function(req, res) {
+	res.send([{name:'wine1'}, { name:'wine2'}]);
+});
 
 var MongoClient = require('mongodb').MongoClient;
 MongoClient.connect("mongodb://admin:8JfNsIYBuViV@127.4.207.1:27017/node01", function(err, db) {
