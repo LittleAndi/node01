@@ -34,6 +34,8 @@ var App = function(){
   };
 
   self.routes['addNames'] = function(req, res) {
+  	console.log('Req: ' + req);
+  	console.log('Body: ' + req.body);
  	var name = req.body;
   	console.log('Adding name: ' + JSON.stringify(name));
   	self.db.collection('names', function(err, collection) {
