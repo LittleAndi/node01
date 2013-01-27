@@ -40,18 +40,21 @@ var App = function(){
 
   self.routes['addNames'] = function(req, res){
   	var name = req.body;
-  	self.db.collection('names').insert(name, { safe: true }, function(err, result) {
-  		if (err) {
-  			res.send({ 'error': 'An error has ocurred'});
-  		} else {
-  			console.log('Success' + JSON.stringify(result[0]));
-  			res.send(result[0]);
-  		}
+  	console.log('Adding name: ' + JSON.stringify(name));
+  	self.db.collection('names', function(err, collection) {
+  		collection.insert(name, { safe: true }, function(err, result) {
+	  		if (err) {
+	  			res.send({ 'error': 'An error has ocurred'});
+	  		} else {
+	  			console.log('Success' + JSON.stringify(result[0]));
+	  			res.send(result[0]);
+	  		}
+	  	});
   	});
   };
 
-    // Webapp urls
-  
+  // Webapp urls
+
   self.app  = express.createServer();
   self.app.get('/health', self.routes['health']);
   self.app.get('/', self.routes['root']);
