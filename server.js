@@ -54,8 +54,8 @@ var App = function(){
 
   self.app  = express();
   self.app.configure(function() {
-  	app.use(express.logger('dev'));
-  	app.use(express.bodyParser());
+  	self.app.use(express.logger('dev'));
+  	self.app.use(express.bodyParser());
   });
 
   self.app.get('/', self.routes['root']);
