@@ -40,7 +40,7 @@ var App = function(){
 
   self.routes['addNames'] = function(req, res){
   	var name = req.body;
-  	self.db.collection('names').insert(name), { safe: true}, function(err, result) {
+  	self.db.collection('names').insert(name, { safe: true }, function(err, result) {
   		if (err) {
   			res.send({ 'error': 'An error has ocurred'});
   		} else {
