@@ -28,7 +28,7 @@ var App = function(){
 
   self.routes['root'] = function(req, res){
     self.db.collection('names').find().toArray(function(err, names) {
-        res.header("Content-Type:","application/json");
+        res.header("Content-Type:","text/json");
         res.end(JSON.stringify(names));
     });
   };
