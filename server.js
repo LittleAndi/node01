@@ -33,9 +33,10 @@ var App = function(){
   //self.routes['health'] = function(req, res){ res.send('1'); };
 
   self.routes['root'] = function(req, res) {
-    self.db.collection('names').find().toArray(function(err, names) {
-        res.header("Content-Type:","text/json");
-        res.end(JSON.stringify(names));
+    var names = self.db.collection('names').find().toArray(function(err, names) {
+      console.log(names);
+      var stream = mu.compileAndRender(self.mustacheTemplates + '/names.html', { "names" : names });
+      util.pump(stream, res);
     });
   };
 
