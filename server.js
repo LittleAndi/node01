@@ -24,7 +24,7 @@ var App = function(){
 
   // Web app logic
   self.routes = {};
-  self.routes['health'] = function(req, res){ res.send('1'); };
+  //self.routes['health'] = function(req, res){ res.send('1'); };
 
   self.routes['root'] = function(req, res){
     self.db.collection('names').find().toArray(function(err, names) {
@@ -36,7 +36,8 @@ var App = function(){
   self.routes['addNames'] = function(req, res) {
   	console.log('Req: ' + req);
   	console.log('Body: ' + req.body);
- 	var name = req.body;
+    
+ 	  var name = req.body;
   	console.log('Adding name: ' + JSON.stringify(name));
   	self.db.collection('names', function(err, collection) {
   		collection.insert(name, { safe: true }, function(err, result) {
@@ -50,6 +51,24 @@ var App = function(){
   	});
   };
 
+  self.routes['addPackItem'] = function(req, res) {
+    console.log('Req: ' + req);
+    console.log('Body: ' + req.body);
+
+    var packItem = req.body;
+    console.log('Adding pack item: ' + JSON.stringify(packItem));
+    self.db.collection('packitems', function(err, collection) {
+      collection.insert(packItem, { safe: true }, function(err, result) {
+        if (err) {
+          res.send({ 'error': 'An error has ocurred'});
+        } else {
+          console.log('Success' + JSON.stringify(result[0]));
+          res.send(result[0]);
+        }
+      });
+    });
+  };
+
   // Webapp urls
 
   self.app  = express();
@@ -60,6 +79,7 @@ var App = function(){
 
   self.app.get('/', self.routes['root']);
   self.app.post('/names', self.routes['addNames']);
+  self.app.post('/packitem', self.routes['addPackItem']);
 
   // Logic to open a database connection. We are going to call this outside of app so it is available to all our functions inside.
 
