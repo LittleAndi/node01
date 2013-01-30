@@ -87,7 +87,11 @@ var App = function(){
   self.app.configure(function() {
   	self.app.use(express.logger('dev'));
   	self.app.use(express.bodyParser());
+    self.app.use('/js', express.static(__dirname + '/js'));
+    self.app.use('/css', express.static(__dirname + '/css'));
+    self.app.use('/img', express.static(__dirname + '/img'));
   });
+
 
   self.app.get('/', self.routes['root']);
   self.app.get('/testing', self.routes['testing']);
