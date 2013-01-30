@@ -38,10 +38,11 @@ var App = function(){
   };
 
   self.routes['testing'] = function(req, res) {
-    var names = self.db.collection('names').find();
-    console.log(names);
-    var stream = mu.compileAndRender('names.html', names);
-    util.pump(stream, res);
+    var names = self.db.collection('names').find().toArray(function(err, names) {
+      console.log(names);
+      var stream = mu.compileAndRender('names.html', JSON.stringify(names));
+      util.pump(stream, res);
+    });
   };
 
   self.routes['addNames'] = function(req, res) {
