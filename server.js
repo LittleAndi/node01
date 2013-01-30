@@ -87,7 +87,7 @@ var App = function(){
   });
 
   self.app.get('/', self.routes['root']);
-  self.app.get('/testing'), self.routes['testing']);
+  self.app.get('/testing', self.routes['testing']);
   self.app.post('/names', self.routes['addNames']);
   self.app.post('/packitem', self.routes['addPackItem']);
 
