@@ -38,7 +38,8 @@ var App = function(){
   };
 
   self.routes['testing'] = function(req, res) {
-    var stream = mu.compileAndRender('index.html', { name: "me"});
+    var names = self.db.collection('names').find();
+    var stream = mu.compileAndRender('names.html', JSON.stringify(names));
     util.pump(stream, res);
   };
 
