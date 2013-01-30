@@ -18,6 +18,7 @@ var App = function(){
   self.db = new mongodb.Db(process.env.OPENSHIFT_APP_NAME, self.dbServer, {auto_reconnect: true});
   self.dbUser = process.env.OPENSHIFT_MONGODB_DB_USERNAME;
   self.dbPass = process.env.OPENSHIFT_MONGODB_DB_PASSWORD;
+  self.staticData = process.env.OPENSHIFT_DATA_DIR;
 
   self.ipaddr  = process.env.OPENSHIFT_INTERNAL_IP;
   self.port    = parseInt(process.env.OPENSHIFT_INTERNAL_PORT) || 8080;
@@ -87,9 +88,9 @@ var App = function(){
   self.app.configure(function() {
   	self.app.use(express.logger('dev'));
   	self.app.use(express.bodyParser());
-    self.app.use('/js', express.static(__dirname + '/js'));
-    self.app.use('/css', express.static(__dirname + '/css'));
-    self.app.use('/img', express.static(__dirname + '/img'));
+    self.app.use('/js', express.static(self.staticData + '/js'));
+    self.app.use('/css', express.static(self.staticData + '/css'));
+    self.app.use('/img', express.static(self.staticData + '/img'));
   });
 
 
