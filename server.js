@@ -19,6 +19,7 @@ var App = function(){
   self.dbUser = process.env.OPENSHIFT_MONGODB_DB_USERNAME;
   self.dbPass = process.env.OPENSHIFT_MONGODB_DB_PASSWORD;
   self.staticData = process.env.OPENSHIFT_DATA_DIR;
+  self.mustacheTemplates = self.staticData + '/templates';
 
   self.ipaddr  = process.env.OPENSHIFT_INTERNAL_IP;
   self.port    = parseInt(process.env.OPENSHIFT_INTERNAL_PORT) || 8080;
@@ -41,7 +42,7 @@ var App = function(){
   self.routes['testing'] = function(req, res) {
     var names = self.db.collection('names').find().toArray(function(err, names) {
       console.log(names);
-      var stream = mu.compileAndRender('names.html', { "names" : names });
+      var stream = mu.compileAndRender(self.mustacheTemplates + '/names.html', { "names" : names });
       util.pump(stream, res);
     });
   };
