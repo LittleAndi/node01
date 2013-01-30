@@ -3,6 +3,10 @@
 var express = require('express');
 var fs      = require('fs');
 var mongodb = require('mongodb');
+var util    = require('util');
+var mu      = require('mu2');
+
+mu.root = __dirname + '/templates';
 
 var App = function(){
 
@@ -26,17 +30,22 @@ var App = function(){
   self.routes = {};
   //self.routes['health'] = function(req, res){ res.send('1'); };
 
-  self.routes['root'] = function(req, res){
+  self.routes['root'] = function(req, res) {
     self.db.collection('names').find().toArray(function(err, names) {
         res.header("Content-Type:","text/json");
         res.end(JSON.stringify(names));
     });
   };
 
+  self.routes['testing'] = function(req, res) {
+    var stream = mu.compileAndRender('index.html', { name: "me"});
+    util.pump(stream, res);
+  };
+
   self.routes['addNames'] = function(req, res) {
   	console.log('Req: ' + req);
   	console.log('Body: ' + req.body);
-    
+
  	  var name = req.body;
   	console.log('Adding name: ' + JSON.stringify(name));
   	self.db.collection('names', function(err, collection) {
@@ -78,6 +87,7 @@ var App = function(){
   });
 
   self.app.get('/', self.routes['root']);
+  self.app.get('/testing'), self.routes['testing']);
   self.app.post('/names', self.routes['addNames']);
   self.app.post('/packitem', self.routes['addPackItem']);
 
