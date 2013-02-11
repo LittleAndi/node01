@@ -1,12 +1,16 @@
 {
-  "name": "OpenShift-Sample-App",
+  "name": "OpenShift-Nystrom-Node01",
   "version": "1.0.0",
-  "description": "OpenShift Sample Application",
+  "description": "Nystrom Node01 Application",
   "keywords": [
     "OpenShift",
     "Node.js",
     "application",
-    "openshift"
+    "openshift",
+    "nystrom",
+    "mustache",
+    "mongodb",
+    "bootstrap"
   ],
   "author": {
     "name": "OpenShift",
