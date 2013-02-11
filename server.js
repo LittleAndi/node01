@@ -6,7 +6,7 @@ var mongodb = require('mongodb');
 var util    = require('util');
 var mu      = require('mu2');
 
-mu.root = __dirname + '/templates';
+mu.root = self.staticData + '/templates';
 
 var App = function(){
 
