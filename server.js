@@ -13,6 +13,7 @@ var App = function(){
   // Scope
   var self = this;
 
+
   // Setup
   console.log('MongoDb HOST: ' + process.env.OPENSHIFT_MONGODB_DB_HOST);
   console.log('MongoDb PORT: ' + process.env.OPENSHIFT_MONGODB_DB_PORT);
