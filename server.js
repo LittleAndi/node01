@@ -6,7 +6,7 @@ var mongodb = require('mongodb');
 var util    = require('util');
 var mu      = require('mu2');
 
-mu.root = self.staticData + '/templates';
+mu.root = process.env.OPENSHIFT_DATA_DIR + '/templates';
 
 var App = function(){
 
