@@ -45,6 +45,7 @@ var App = function(){
   };
 
   self.routes['testing'] = function(req, res) {
+    mu.clearCache();
     var names = self.db.collection('names').find().toArray(function(err, names) {
       console.log(names);
       var stream = mu.compileAndRender(self.mustacheTemplates + '/names.html', { "names" : names });
