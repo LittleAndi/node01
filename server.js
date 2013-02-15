@@ -74,7 +74,7 @@ var App = function(){
   self.routes['getNames'] = function(req, res) {
     mu.clearCache();
     var names = self.db.collection('names').find().toArray(function(err, names) {
-      var stream = mu.compileAndRender('/namesform.html', { "names" : names });
+      var stream = mu.compileAndRender(self.mustacheTemplates + '/namesform.html', { "names" : names });
       util.pump(stream, res);
     });
   };
