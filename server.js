@@ -71,6 +71,14 @@ var App = function(){
   	});
   };
 
+  self.routes['getNames'] = function(req, res) {
+    mu.clearCache();
+    var names = self.db.collection('names').find().toArray(function(err, names) {
+      var stream = mu.compileAndRender('/namesform.html', { "names" : names });
+      util.pump(stream, res);
+    });
+  };
+
   self.routes['addPackItem'] = function(req, res) {
     console.log('Req: ' + req);
     console.log('Body: ' + req.body);
@@ -103,6 +111,7 @@ var App = function(){
 
   self.app.get('/', self.routes['root']);
   self.app.get('/testing', self.routes['testing']);
+  self.app.get('/names', self.routes['getNames']);
   self.app.post('/names', self.routes['addNames']);
   self.app.post('/packitem', self.routes['addPackItem']);
 
