@@ -106,6 +106,7 @@ var App = function(){
     self.app.use('/js', express.static(self.staticData + '/js'));
     self.app.use('/css', express.static(self.staticData + '/css'));
     self.app.use('/img', express.static(self.staticData + '/img'));
+    self.app.use('/edit_area', express.static(self.staticData + '/edit_area'));
   });
 
 
