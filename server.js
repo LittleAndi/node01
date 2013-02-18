@@ -110,7 +110,7 @@ var App = function(){
     })
   };
 
-  self.routes['adddTemplates'] = function(req, res) {
+  self.routes['addTemplates'] = function(req, res) {
     console.log('Req: ' + req);
     console.log('Body: ' + req.body);
 
