@@ -97,6 +97,18 @@ var App = function(){
     });
   };
 
+  self.routes['getTemplates'] = function(req, res) {
+    self.db.collection('templates', function(err, collection) {
+      collection.find().toArray(function(err, templates) {
+        var stream = mu.compileAndRender(self.mustacheTemplates + '/templates.html', { "templates": templates });
+        util.pump(stream, res);
+      });
+      if (err) {
+        res.send({ 'error': 'An error has occured'});
+      };
+    })
+  };
+
   // Webapp urls
 
   self.app  = express();
@@ -115,6 +127,7 @@ var App = function(){
   self.app.get('/names', self.routes['getNames']);
   self.app.post('/names', self.routes['addNames']);
   self.app.post('/packitem', self.routes['addPackItem']);
+  self.app.get('/templates', self.routes['getTemplates']);
 
   // Logic to open a database connection. We are going to call this outside of app so it is available to all our functions inside.
 
