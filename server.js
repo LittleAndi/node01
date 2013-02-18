@@ -98,6 +98,9 @@ var App = function(){
   };
 
   self.routes['getTemplates'] = function(req, res) {
+    console.log('Req: ' + req);
+    console.log('Body: ' + req.body);
+
     self.db.collection('templates', function(err, collection) {
       collection.find().toArray(function(err, templates) {
         mu.clearCache();
