@@ -97,6 +97,23 @@ var App = function(){
     });
   };
 
+  self.routes['getTemplate'] = function(req, res) {
+    console.log('Req: ' + req);
+    console.log('Body: ' + req.body);
+    console.log('id: ' + req.params.id);
+
+    self.db.collection('templates', function(err, collection) {
+      collection.find({ "id": req.params.id }).toArray(function(err, templates) {
+        mu.clearCache();
+        var stream = mu.compileAndRender(self.mustacheTemplates + '/templates.html', { "templates": templates });
+        util.pump(stream, res);
+      });
+      if (err) {
+        res.send({ 'error': 'An error has occured'});
+      };
+    })
+  };
+
   self.routes['getTemplates'] = function(req, res) {
     console.log('Req: ' + req);
     console.log('Body: ' + req.body);
@@ -114,7 +131,7 @@ var App = function(){
     })
   };
 
-  self.routes['addTemplates'] = function(req, res) {
+  self.routes['addTemplate'] = function(req, res) {
     console.log('Req: ' + req);
     console.log('Body: ' + req.body);
 
@@ -151,8 +168,8 @@ var App = function(){
   self.app.post('/names', self.routes['addNames']);
   self.app.post('/packitem', self.routes['addPackItem']);
   self.app.get('/templates', self.routes['getTemplates']);
-  self.app.get('/templates/:id', self.routes['getTemplates']);
-  self.app.post('/templates', self.routes['addTemplates']);
+  self.app.get('/template/:id', self.routes['getTemplate']);
+  self.app.post('/template', self.routes['addTemplate']);
 
   // Logic to open a database connection. We are going to call this outside of app so it is available to all our functions inside.
 
