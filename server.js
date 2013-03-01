@@ -105,7 +105,7 @@ var App = function(){
     self.db.collection('templates', function(err, collection) {
       collection.find({ "id": req.params.id }).toArray(function(err, templates) {
         mu.clearCache();
-        var stream = mu.compileAndRender(self.mustacheTemplates + '/templates.html', { "templates": templates });
+        var stream = mu.compileAndRender(self.mustacheTemplates + '/template_edit.html', { "templates": templates });
         util.pump(stream, res);
       });
       if (err) {
