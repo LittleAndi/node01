@@ -117,7 +117,6 @@ var App = function(){
   self.routes['getTemplates'] = function(req, res) {
     console.log('Req: ' + req);
     console.log('Body: ' + req.body);
-    console.log('id: ' + req.params.id);
 
     self.db.collection('templates', function(err, collection) {
       collection.find().toArray(function(err, templates) {
@@ -149,6 +148,27 @@ var App = function(){
     });
   };
 
+  self.routes['updTemplate'] = function(req, res) {
+    console.log('Req: ' + req);
+    console.log('Body: ' + req.body);
+    console.log('id: ' + req.params.id);
+
+    var templateinfo = req.body;
+    templateinfo.template = req.params.id;
+
+    console.log('Adding template: ' + JSON.stringify(templateinfo));
+    self.db.collection('templates', function(err, collection) {
+      collection.insert(templateinfo, { safe: true }, function(err, result) {
+        if (err) {
+          res.send({ 'error': 'An error has ocurred'});
+        } else {
+          console.log('Success' + JSON.stringify(result[0]));
+          res.send(result[0]);
+        }
+      });
+    });
+  };
+
   // Webapp urls
 
   self.app  = express();
@@ -170,6 +190,7 @@ var App = function(){
   self.app.get('/templates', self.routes['getTemplates']);
   self.app.get('/template/:id', self.routes['getTemplate']);
   self.app.post('/template', self.routes['addTemplate']);
+  self.app.put('/template/:id', self.routes['updTemplate']);
 
   // Logic to open a database connection. We are going to call this outside of app so it is available to all our functions inside.
 
