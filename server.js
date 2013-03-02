@@ -149,6 +149,7 @@ var App = function(){
   };
 
   self.routes['updTemplate'] = function(req, res) {
+    console.log('*** updTemplate');
     console.log('Req: ' + req);
     console.log('Body: ' + req.body);
     console.log('id: ' + req.params.id);
