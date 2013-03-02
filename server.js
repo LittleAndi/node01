@@ -163,17 +163,16 @@ var App = function(){
     console.log('Adding template: ' + JSON.stringify(templateInfo));
 
     self.db.collection('templates', function(err, collection) {
-        // Upsert
-        collection.update({ "template": templateId }, templateInfo, { upsert: true }, function(err, result) {
-          if (err) {
-            res.send({ 'error': 'An error has ocurred'});
-          } else {
-            console.log('Success' + JSON.stringify(result[0]));
+      // Upsert
+      collection.update({ "template": templateId }, templateInfo, { upsert: true }, function(err, result) {
+        if (err) {
+          res.send({ 'error': 'An error has ocurred'});
+        } else {
+          console.log('Success' + JSON.stringify(result[0]));
 
-            // Return new document
-            res.send(result[0]);
-          }
-        });
+          // Return new document
+          res.send(result[0]);
+        }
       });
     });
   };
