@@ -98,14 +98,15 @@ var App = function(){
   };
 
   self.routes['getTemplate'] = function(req, res) {
+    console.log('*** getTemplate');
     console.log('Req: ' + req);
     console.log('Body: ' + req.body);
     console.log('id: ' + req.params.id);
 
     self.db.collection('templates', function(err, collection) {
-      collection.find({ "id": req.params.id }).toArray(function(err, templates) {
+      collection.findOne({ "id": req.params.id }, function(err, template) {
         mu.clearCache();
-        var stream = mu.compileAndRender(self.mustacheTemplates + '/template_edit.html', { "templates": templates });
+        var stream = mu.compileAndRender(self.mustacheTemplates + '/template_edit.html', template);
         util.pump(stream, res);
       });
       if (err) {
@@ -131,6 +132,7 @@ var App = function(){
   };
 
   self.routes['addTemplate'] = function(req, res) {
+    console.log('*** addTemplate');
     console.log('Req: ' + req);
     console.log('Body: ' + req.body);
 
