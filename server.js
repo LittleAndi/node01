@@ -156,18 +156,24 @@ var App = function(){
     console.log('Body: ' + req.body);
     console.log('id: ' + req.params.id);
 
-    var templateinfo = req.body;
-    templateinfo.template = req.params.id;
+    var templateId = req.params.id;
+    var templateInfo = req.body;
+    templateInfo.template = templateId;
 
-    console.log('Adding template: ' + JSON.stringify(templateinfo));
+    console.log('Adding template: ' + JSON.stringify(templateInfo));
+
     self.db.collection('templates', function(err, collection) {
-      collection.insert(templateinfo, { safe: true }, function(err, result) {
-        if (err) {
-          res.send({ 'error': 'An error has ocurred'});
-        } else {
-          console.log('Success' + JSON.stringify(result[0]));
-          res.send(result[0]);
-        }
+        // Upsert
+        collection.update({ "template": templateId }, templateInfo, { upsert: true }, function(err, result) {
+          if (err) {
+            res.send({ 'error': 'An error has ocurred'});
+          } else {
+            console.log('Success' + JSON.stringify(result[0]));
+
+            // Return new document
+            res.send(result[0]);
+          }
+        });
       });
     });
   };
