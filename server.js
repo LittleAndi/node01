@@ -170,8 +170,14 @@ var App = function(){
     console.log('Adding template: ' + JSON.stringify(templateInfo));
 
     self.db.collection('templates', function(err, collection) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log('Collection ok');
+      }
+
       // Upsert
-      collection.update({ "template": templateId }, templateInfo, { upsert: true }, function(err, result) {
+      collection.update({ template: templateId }, templateInfo, { safe: true, upsert: true }, function(err, result) {
         if (err) {
           console.log(err);
           console.log(result);
