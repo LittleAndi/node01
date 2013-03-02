@@ -103,9 +103,16 @@ var App = function(){
     console.log('Body: ' + req.body);
     console.log('id: ' + req.params.id);
 
+    var templateId = req.params.id;
+
     self.db.collection('templates', function(err, collection) {
-      collection.findOne({ "template": req.params.id }, function(err, template) {
+      collection.findOne({ "template": templateId }, function(err, template) {
         mu.clearCache();
+        if (template == null)
+        {
+          template = { "template": templateId, "data": "" };
+        }
+
         var stream = mu.compileAndRender(self.mustacheTemplates + '/template_edit.html', template);
         util.pump(stream, res);
       });
