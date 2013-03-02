@@ -172,8 +172,6 @@ var App = function(){
     self.db.collection('templates', function(err, collection) {
       if (err) {
         console.log(err);
-      } else {
-        console.log('Collection ok');
       }
 
       // Upsert
@@ -183,10 +181,10 @@ var App = function(){
           console.log(result);
           res.send({ 'error': 'An error has ocurred'});
         } else {
-          console.log('Success' + JSON.stringify(result[0]));
+          console.log('Template updated!');
 
           // Return new document
-          res.send(result[0]);
+          res.send('Template updated!');
         }
       });
     });
