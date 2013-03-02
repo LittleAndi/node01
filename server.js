@@ -173,6 +173,8 @@ var App = function(){
       // Upsert
       collection.update({ "template": templateId }, templateInfo, { upsert: true }, function(err, result) {
         if (err) {
+          console.log(err);
+          console.log(result);
           res.send({ 'error': 'An error has ocurred'});
         } else {
           console.log('Success' + JSON.stringify(result[0]));
