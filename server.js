@@ -232,7 +232,12 @@ var App = function(){
           }
           templatecollection.find().toArray(function(err, templates) {
             page.templates = templates;
-            page.templates.filter(function(pages) { return pages.template == page.templateId; }).selected = true;
+
+            for (template in page.templates) {
+              if (template.template == page.templateId) {
+                template.selected = true;
+              }
+            }
 
             console.log(JSON.stringify(page));
 
