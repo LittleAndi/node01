@@ -217,7 +217,7 @@ var App = function(){
 
     var pageId = req.params[0];
 
-    self.db.collection('templates', function(err, collection) {
+    self.db.collection('pages', function(err, collection) {
       collection.findOne({ "pageId": pageId }, function(err, page) {
         mu.clearCache();
         if (page == null)
