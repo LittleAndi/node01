@@ -308,7 +308,7 @@ var App = function(){
   });
 
 
-  self.app.get('/', self.routes['root']);)
+  self.app.get('/', self.routes['root']);
   self.app.get('/testing', self.routes['testing']);
   self.app.get('/names', self.routes['getNames']);
   self.app.post('/names', self.routes['addNames']);
