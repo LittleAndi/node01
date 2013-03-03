@@ -311,7 +311,7 @@ var App = function(){
               templateCollection.findOne({ "template": page.templateId }, function(err, template) {
                 if (template != null && template.data != null) {
                   mu.compileText(template.template, template.data, function(err, compiledTemplate) {
-                    var stream = mu.render(compiledTemplate, page.data);
+                    var stream = mu.render(compiledTemplate, page);
                     util.pump(stream, res);
                   });
                 } else {
