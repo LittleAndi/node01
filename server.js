@@ -222,7 +222,7 @@ var App = function(){
         mu.clearCache();
         if (page == null)
         {
-          page = { "pageId": pageId, "data": "" };
+          page = { "pageId": pageId, "data": "", "templateId": "" };
         }
 
         self.db.collection('templates', function(err, templatecollection) {
@@ -231,6 +231,8 @@ var App = function(){
           });
         });
 
+        console.log(JSON.stringify(page));
+        
         var stream = mu.compileAndRender(self.mustacheTemplates + '/page_edit.html', page);
         util.pump(stream, res);
       });
