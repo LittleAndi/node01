@@ -305,7 +305,7 @@ var App = function(){
         }
 
         if (page != null) {
-          if (page.template != null && page.template != "") {
+          if (page.templateId != null && page.templateId != "") {
             // Use template, try to load it from db
             console.log('Page has template, try to load it.');
 
@@ -314,7 +314,7 @@ var App = function(){
                 if (template != null && template.data != null) {
                   console.log('Template found:');
                   console.log(JSON.stringify(template));
-                  
+
                   mu.compileText(template.template, template.data, function(err, compiledTemplate) {
                     var stream = mu.render(compiledTemplate, page);
                     util.pump(stream, res);
@@ -326,6 +326,8 @@ var App = function(){
             });
           } else {
             // No template, just send page data
+            console.log('Page has no template, sending raw data.');
+
             res.send(page.data);
           }
         } else {
