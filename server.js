@@ -130,8 +130,19 @@ var App = function(){
           template = { "template": templateId, "data": "" };
         }
 
-        var stream = mu.compileAndRender(self.mustacheTemplates + '/template_edit.html', template);
-        util.pump(stream, res);
+        // Get the template for template_edit
+        collection.findOne({ "template": "template_edit" }, function(err, template_edit) {
+          if (template_edit != null) {
+            mu.compileText(template_edit.template, template_edit.data, function(err, compiledTemplate) {
+              var stream = mu.render(compiledTemplate, template);
+              util.pump(stream, res);
+            });
+          } else {
+            // Template not found, using file
+            var stream = mu.compileAndRender(self.mustacheTemplates + '/template_edit.html', template);
+            util.pump(stream, res);
+          }
+        });
       });
       if (err) {
         res.send({ 'error': 'An error has occured'});
