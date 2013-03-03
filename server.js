@@ -233,12 +233,13 @@ var App = function(){
           templatecollection.find().toArray(function(err, templates) {
             page.templates = templates;
           });
+  
+          console.log(JSON.stringify(page));
+
+          var stream = mu.compileAndRender(self.mustacheTemplates + '/page_edit.html', page);
+          util.pump(stream, res);
         });
 
-        console.log(JSON.stringify(page));
-
-        var stream = mu.compileAndRender(self.mustacheTemplates + '/page_edit.html', page);
-        util.pump(stream, res);
       });
       if (err) {
         res.send({ 'error': 'An error has occured'});
