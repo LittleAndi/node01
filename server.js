@@ -307,9 +307,14 @@ var App = function(){
         if (page != null) {
           if (page.template != null && page.template != "") {
             // Use template, try to load it from db
+            console.log('Page has template, try to load it.');
+
             self.db.collection('templates', function(err, templateCollection) {
               templateCollection.findOne({ "template": page.templateId }, function(err, template) {
                 if (template != null && template.data != null) {
+                  console.log('Template found:');
+                  console.log(JSON.stringify(template));
+                  
                   mu.compileText(template.template, template.data, function(err, compiledTemplate) {
                     var stream = mu.render(compiledTemplate, page);
                     util.pump(stream, res);
