@@ -193,7 +193,28 @@ var App = function(){
   self.routes['getPage'] = function(req, res) {
     console.log('*** getPage');
     console.log(req.route);
-    res.send(req.route);
+    console.log(req.params[0]);
+    var pageId = req.params[0];
+
+    self.db.collection('pages', function(err, collection) {
+      if (err) {
+        console.log(err);
+      }
+
+      collection.findOne({ "pageId": pageId }, function(err, page) {
+        if (err) {
+          console.log(err);
+          res.send(err);
+        }
+
+        if (page != null) {
+          res.send(page.data);
+        } else {
+          res.send(req.route);
+        }
+      });
+    });
+
   };
 
   // Webapp urls
