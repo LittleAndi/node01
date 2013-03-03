@@ -190,6 +190,12 @@ var App = function(){
     });
   };
 
+  self.routes['getPage'] = function(req, res) {
+    console.log('*** getPage');
+    console.log(req.route);
+    res.send(req.route);
+  };
+
   // Webapp urls
 
   self.app  = express();
@@ -212,6 +218,7 @@ var App = function(){
   self.app.get('/template/:id', self.routes['getTemplate']);
   self.app.post('/template', self.routes['addTemplate']);
   self.app.put('/template/:id', self.routes['updTemplate']);
+  self.app.get('*', self.routes['getPage']);
 
   // Logic to open a database connection. We are going to call this outside of app so it is available to all our functions inside.
 
