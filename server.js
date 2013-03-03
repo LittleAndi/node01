@@ -300,6 +300,7 @@ var App = function(){
   self.app.configure(function() {
   	self.app.use(express.logger('dev'));
   	self.app.use(express.bodyParser());
+    self.app.use('/favicon.ico', express.static(self.staticData + '/img/favicon.ico'));
     self.app.use('/js', express.static(self.staticData + '/js'));
     self.app.use('/css', express.static(self.staticData + '/css'));
     self.app.use('/img', express.static(self.staticData + '/img'));
@@ -307,7 +308,7 @@ var App = function(){
   });
 
 
-  self.app.get('/', self.routes['root']);
+  self.app.get('/', self.routes['root']);)
   self.app.get('/testing', self.routes['testing']);
   self.app.get('/names', self.routes['getNames']);
   self.app.post('/names', self.routes['addNames']);
