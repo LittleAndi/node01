@@ -97,6 +97,22 @@ var App = function(){
     });
   };
 
+  self.routes['getTemplates'] = function(req, res) {
+    console.log('Req: ' + req);
+    console.log('Body: ' + req.body);
+
+    self.db.collection('templates', function(err, collection) {
+      collection.find().toArray(function(err, templates) {
+        mu.clearCache();
+        var stream = mu.compileAndRender(self.mustacheTemplates + '/templates.html', { "templates": templates });
+        util.pump(stream, res);
+      });
+      if (err) {
+        res.send({ 'error': 'An error has occured'});
+      };
+    })
+  };
+
   self.routes['getTemplate'] = function(req, res) {
     console.log('*** getTemplate');
     console.log('Req: ' + req);
@@ -114,22 +130,6 @@ var App = function(){
         }
 
         var stream = mu.compileAndRender(self.mustacheTemplates + '/template_edit.html', template);
-        util.pump(stream, res);
-      });
-      if (err) {
-        res.send({ 'error': 'An error has occured'});
-      };
-    })
-  };
-
-  self.routes['getTemplates'] = function(req, res) {
-    console.log('Req: ' + req);
-    console.log('Body: ' + req.body);
-
-    self.db.collection('templates', function(err, collection) {
-      collection.find().toArray(function(err, templates) {
-        mu.clearCache();
-        var stream = mu.compileAndRender(self.mustacheTemplates + '/templates.html', { "templates": templates });
         util.pump(stream, res);
       });
       if (err) {
@@ -157,8 +157,8 @@ var App = function(){
     });
   };
 
-  self.routes['updTemplate'] = function(req, res) {
-    console.log('*** updTemplate');
+  self.routes['putTemplate'] = function(req, res) {
+    console.log('*** putTemplate');
     console.log('Req: ' + req);
     console.log('Body: ' + req.body);
     console.log('id: ' + req.params.id);
@@ -190,7 +190,49 @@ var App = function(){
     });
   };
 
+  self.routes['getPages'] = function(req, res) {
+    console.log('*** getPages');
+    console.log('Req: ' + req);
+    console.log('Body: ' + req.body);
+
+    self.db.collection('pages', function(err, collection) {
+      collection.find().toArray(function(err, templates) {
+        mu.clearCache();
+        var stream = mu.compileAndRender(self.mustacheTemplates + '/pages.html', { "pages": pages });
+        util.pump(stream, res);
+      });
+      if (err) {
+        res.send({ 'error': 'An error has occured'});
+      };
+    })
+  };
+
   self.routes['getPage'] = function(req, res) {
+    console.log('*** getPage');
+    console.log('Req: ' + req);
+    console.log('Body: ' + req.body);
+    console.log('id: ' + req.params[0]);
+
+    var pageId = req.params[0];
+
+    self.db.collection('templates', function(err, collection) {
+      collection.findOne({ "pageId": pageId }, function(err, page) {
+        mu.clearCache();
+        if (page == null)
+        {
+          page = { "pageId": pageId, "data": "" };
+        }
+
+        var stream = mu.compileAndRender(self.mustacheTemplates + '/page_edit.html', page);
+        util.pump(stream, res);
+      });
+      if (err) {
+        res.send({ 'error': 'An error has occured'});
+      };
+    })
+  };
+
+  self.routes['renderPage'] = function(req, res) {
     console.log('*** getPage');
     console.log(req.route);
     console.log(req.params[0]);
@@ -238,8 +280,11 @@ var App = function(){
   self.app.get('/templates', self.routes['getTemplates']);
   self.app.get('/template/:id', self.routes['getTemplate']);
   self.app.post('/template', self.routes['addTemplate']);
-  self.app.put('/template/:id', self.routes['updTemplate']);
-  self.app.get('*', self.routes['getPage']);
+  self.app.put('/template/:id', self.routes['putTemplate']);
+  self.app.get('/pages', self.routes['getPages']);
+  self.app.get('/page/*', self.routes['getPage']);
+  self.app.put('/page/*', self.routes['putPage']);
+  self.app.get('*', self.routes['renderPage']);
 
   // Logic to open a database connection. We are going to call this outside of app so it is available to all our functions inside.
 
