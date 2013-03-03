@@ -352,7 +352,7 @@ var App = function(){
             // No template, just send page data
             console.log('Page has no template, sending raw data.');
 
-            res.send(page.data);
+            res.send(page.html);
           }
         } else {
           res.send(req.route);
