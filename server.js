@@ -288,24 +288,41 @@ var App = function(){
   };
 
   self.routes['renderPage'] = function(req, res) {
-    console.log('*** getPage');
+    console.log('*** renderPage');
     console.log(req.route);
     console.log(req.params[0]);
     var pageId = req.params[0];
 
-    self.db.collection('pages', function(err, collection) {
+    self.db.collection('pages', function(err, pageCollection) {
       if (err) {
         console.log(err);
       }
 
-      collection.findOne({ "pageId": pageId }, function(err, page) {
+      pageCollection.findOne({ "pageId": pageId }, function(err, page) {
         if (err) {
           console.log(err);
           res.send(err);
         }
 
         if (page != null) {
-          res.send(page.data);
+          if (page.template != null && page.template != "") {
+            // Use template, try to load it from db
+            self.db.collection('templates', function(err, templateCollection) {
+              templateCollection.findOne({ "template": page.templateId }, function(err, template) {
+                if (template != null && template.data != null) {
+                  mu.compileText(template.template, template.data, function(err, compiledTemplate) {
+                    var stream = mu.render(compiledTemplate, page.data);
+                    util.pump(stream, res);
+                  });
+                } else {
+                  console.log('Template not found or data not ok.');
+                }
+              });
+            });
+          } else {
+            // No template, just send page data
+            res.send(page.data);
+          }
         } else {
           res.send(req.route);
         }
