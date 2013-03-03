@@ -232,6 +232,39 @@ var App = function(){
     })
   };
 
+  self.routes['putPage'] = function(req, res) {
+    console.log('*** putPage');
+    console.log('Req: ' + req);
+    console.log('Body: ' + req.body);
+    console.log('id: ' + req.params[0]);
+
+    var pageId = req.params[0];
+    var pageInfo = req.body;
+    pageInfo.pageId = pageId;
+
+    console.log('Adding template: ' + JSON.stringify(pageInfo));
+
+    self.db.collection('templates', function(err, collection) {
+      if (err) {
+        console.log(err);
+      }
+
+      // Upsert
+      collection.update({ pageId: pageId }, pageInfo, { safe: true, upsert: true }, function(err, result) {
+        if (err) {
+          console.log(err);
+          console.log(result);
+          res.send({ 'error': 'An error has ocurred'});
+        } else {
+          console.log('Page updated!');
+
+          // Return new document
+          res.send('Page updated!');
+        }
+      });
+    });
+  };
+
   self.routes['renderPage'] = function(req, res) {
     console.log('*** getPage');
     console.log(req.route);
