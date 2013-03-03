@@ -225,6 +225,12 @@ var App = function(){
           page = { "pageId": pageId, "data": "" };
         }
 
+        self.db.collection('templates', function(err, templatecollection) {
+          templatecollection.find().toArray(function(err, templates) {
+            page.templates = templates;
+          });
+        });
+
         var stream = mu.compileAndRender(self.mustacheTemplates + '/page_edit.html', page);
         util.pump(stream, res);
       });
