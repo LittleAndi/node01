@@ -102,14 +102,15 @@ var App = function(){
     console.log('Body: ' + req.body);
 
     self.db.collection('templates', function(err, collection) {
+      if (err) {
+        console.log(err);
+        res.send({ 'error': 'An error has occured'});
+      };
       collection.find().toArray(function(err, templates) {
         mu.clearCache();
         var stream = mu.compileAndRender(self.mustacheTemplates + '/templates.html', { "templates": templates });
         util.pump(stream, res);
       });
-      if (err) {
-        res.send({ 'error': 'An error has occured'});
-      };
     })
   };
 
@@ -196,14 +197,15 @@ var App = function(){
     console.log('Body: ' + req.body);
 
     self.db.collection('pages', function(err, collection) {
-      collection.find().toArray(function(err, templates) {
+      if (err) {
+        console.log(err);
+        res.send({ 'error': 'An error has occured'});
+      };
+      collection.find().toArray(function(err, pages) {
         mu.clearCache();
         var stream = mu.compileAndRender(self.mustacheTemplates + '/pages.html', { "pages": pages });
         util.pump(stream, res);
       });
-      if (err) {
-        res.send({ 'error': 'An error has occured'});
-      };
     })
   };
 
