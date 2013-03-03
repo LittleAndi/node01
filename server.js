@@ -133,8 +133,8 @@ var App = function(){
         // Get the template for template_edit
         collection.findOne({ "template": "template_edit" }, function(err, template_edit) {
           if (template_edit != null) {
-            mu.compileText(template_edit.template, template_edit.data, function(err, compiledTemplate) {
-              var stream = mu.render(compiledTemplate, template);
+            mu.compileText(template_edit.template, template_edit.data, function(err, compiledEditTemplate) {
+              var stream = mu.render(compiledEditTemplate, template);
               util.pump(stream, res);
             });
           } else {
@@ -143,6 +143,7 @@ var App = function(){
             util.pump(stream, res);
           }
         });
+
       });
       if (err) {
         res.send({ 'error': 'An error has occured'});
@@ -252,8 +253,20 @@ var App = function(){
 
             console.log(JSON.stringify(page));
 
-            var stream = mu.compileAndRender(self.mustacheTemplates + '/page_edit.html', page);
-            util.pump(stream, res);
+            // Get the template for page_edit
+            templatecollection.findOne({ "template": "page_edit" }, function(err, page_edit) {
+              if (page_edit != null) {
+                mu.compileText(page_edit.template, page_edit.data, function(err, compiledEditPage) {
+                  var stream = mu.render(compiledEditPage, page);
+                  util.pump(stream, res);
+                });
+              } else {
+                // Template not found, using file
+                var stream = mu.compileAndRender(self.mustacheTemplates + '/page_edit.html', page);
+                util.pump(stream, res);
+              }
+            });
+
           });
   
         });
