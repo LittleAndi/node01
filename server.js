@@ -244,9 +244,9 @@ var App = function(){
     var pageInfo = req.body;
     pageInfo.pageId = pageId;
 
-    console.log('Adding template: ' + JSON.stringify(pageInfo));
+    console.log('Adding page: ' + JSON.stringify(pageInfo));
 
-    self.db.collection('templates', function(err, collection) {
+    self.db.collection('pages', function(err, collection) {
       if (err) {
         console.log(err);
       }
