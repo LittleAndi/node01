@@ -351,11 +351,24 @@ var App = function(){
                 }
 
                 if (template != null && template.data != null) {
-                  console.log('Template found:');
-                  console.log(JSON.stringify(template));
+                  console.log('Template found: ' + template.template);
+                  //console.log(JSON.stringify(template));
 
                   mu.compileText(template.template, template.data, function(err, compiledTemplate) {
+                    if (err)
+                    {
+                      console.log(err);
+                      res.send(err);
+                    }
                     mu.compileText(compiledTemplate, page.data, function(err, compiledPage) {
+                      if (err)
+                      {
+                        console.log(err);
+                        res.send(err);
+                      }
+
+                      console.log('Got a rendered page, returning it.');
+                      
                       var stream = mu.render(compiledPage, page);
                       util.pump(stream, res);
                     });
