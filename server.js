@@ -370,9 +370,9 @@ var App = function(){
                     //     res.send(err);
                     //   }
 
-                      console.log('Got a rendered page (compiledPage), returning it.');
+                      console.log('Rendering page with template (compiledTemplate) and returning it.');
 
-                      var stream = mu.render(compiledPage, page);
+                      var stream = mu.render(compiledTemplate, page);
                       util.pump(stream, res);
                     // });
                   });
