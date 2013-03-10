@@ -361,6 +361,7 @@ var App = function(){
                       res.send(err);
                     }
 
+                    console.log('Trying to render the template with the page.');
                     var pageTemlate = mu.render(compiledTemplate, page);
 
                     mu.compileText(page.pageId, pageTemlate, function(err, compiledPage) {
