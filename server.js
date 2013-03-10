@@ -361,19 +361,18 @@ var App = function(){
                       res.send(err);
                     }
 
-                    console.log('Trying to render the template with the page.');
-                    var pageTemlate = mu.render(compiledTemplate, page);
+                    var stream = mu.render(compiledTemplate, page);
+                    util.pump(stream, res);
 
-                    mu.compileText(page.pageId, pageTemlate, function(err, compiledPage) {
-                      var stream = mu.render(compiledPage, page.data);
-                      util.pump(stream, res);
-                    });
 
-                    // console.log('Rendering page with template (compiledTemplate) and returning it.');
+                    //console.log('Trying to render the template with the page.');
+                    //var pageTemlate = mu.render(compiledTemplate, page);
 
-                    // var stream = mu.render(compiledTemplate, page);
+                    //mu.compileText(page.pageId, pageTemlate, function(err, compiledPage) {
+                    //  var stream = mu.render(compiledPage, page.data);
                     //  util.pump(stream, res);
-                    // });
+                    //});
+
                   });
                 } else {
                   console.log('Template not found or data not ok.');
