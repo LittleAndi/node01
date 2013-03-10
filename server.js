@@ -360,18 +360,21 @@ var App = function(){
                       console.log(err);
                       res.send(err);
                     }
-                    mu.compileText(compiledTemplate, page.data, function(err, compiledPage) {
-                      if (err)
-                      {
-                        console.log(err);
-                        res.send(err);
-                      }
 
-                      console.log('Got a rendered page, returning it.');
-                      
+                    // console.log('Got the compiledTemplate');
+
+                    // mu.compileText(page.pageId, compiledTemplate, function(err, compiledPage) {
+                    //   if (err)
+                    //   {
+                    //     console.log(err);
+                    //     res.send(err);
+                    //   }
+
+                      console.log('Got a rendered page (compiledPage), returning it.');
+
                       var stream = mu.render(compiledPage, page);
                       util.pump(stream, res);
-                    });
+                    // });
                   });
                 } else {
                   console.log('Template not found or data not ok.');
