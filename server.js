@@ -361,19 +361,17 @@ var App = function(){
                       res.send(err);
                     }
 
-                    // console.log('Got the compiledTemplate');
+                    var pageTemlate = mu.render(compiledTemplate, page);
 
-                    // mu.compileText(page.pageId, compiledTemplate, function(err, compiledPage) {
-                    //   if (err)
-                    //   {
-                    //     console.log(err);
-                    //     res.send(err);
-                    //   }
-
-                      console.log('Rendering page with template (compiledTemplate) and returning it.');
-
-                      var stream = mu.render(compiledTemplate, page);
+                    mu.compileText(page.pageId, pageTemlate, function(err, compiledPage) {
+                      var stream = mu.render(compiledPage, page.data);
                       util.pump(stream, res);
+                    });
+
+                    // console.log('Rendering page with template (compiledTemplate) and returning it.');
+
+                    // var stream = mu.render(compiledTemplate, page);
+                    //  util.pump(stream, res);
                     // });
                   });
                 } else {
