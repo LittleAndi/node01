@@ -234,17 +234,21 @@ var App = function(){
         mu.clearCache();
         if (page == null)
         {
-          page = { "pageId": pageId, "data": "", "templateId": "" };
+          page = { "pageId": pageId, "data": "", "html": "", "templateId": "" };
         }
 
+        // Get the template collection
         self.db.collection('templates', function(err, templatecollection) {
           if (err)
           {
             console.log(err);
           }
+
+          // Get all templates
           templatecollection.find().toArray(function(err, templates) {
             page.templates = templates;
 
+            // Set the selected template from the page.templateId
             for (var i = 0, n = page.templates.length; i<n; i++) {
               if (page.templates[i].template == page.templateId) {
                 page.templates[i].selected = true;
@@ -317,11 +321,13 @@ var App = function(){
     console.log(req.params[0]);
     var pageId = req.params[0];
 
+    // Get the pages collection
     self.db.collection('pages', function(err, pageCollection) {
       if (err) {
         console.log(err);
       }
 
+      // Try to find the page that the user is looking for
       pageCollection.findOne({ "pageId": pageId }, function(err, page) {
         if (err) {
           console.log(err);
@@ -330,18 +336,29 @@ var App = function(){
 
         if (page != null) {
           if (page.templateId != null && page.templateId != "") {
+
             // Use template, try to load it from db
             console.log('Page has template, try to load it.');
 
+            // Get the templates collection
             self.db.collection('templates', function(err, templateCollection) {
+
+              // Find the one from page.templateId
               templateCollection.findOne({ "template": page.templateId }, function(err, template) {
+                if (err) {
+                  console.log(err);
+                  res.send(err);
+                }
+
                 if (template != null && template.data != null) {
                   console.log('Template found:');
                   console.log(JSON.stringify(template));
 
                   mu.compileText(template.template, template.data, function(err, compiledTemplate) {
-                    var stream = mu.render(compiledTemplate, page);
-                    util.pump(stream, res);
+                    mu.compileText(compiledTemplate, page.data, function(err, compiledPage) {
+                      var stream = mu.render(compiledPage, page);
+                      util.pump(stream, res);
+                    });
                   });
                 } else {
                   console.log('Template not found or data not ok.');
