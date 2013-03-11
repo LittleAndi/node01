@@ -365,7 +365,7 @@ var App = function(){
                     var stream = mu.render(compiledTemplate, page);
 
                     var sStream = new StringStream();
-                    s.on('end', function() {
+                    sStream.on('end', function() {
                       console.log(this.toString());
                     });
                     stream.pipe(sStream);
