@@ -40,7 +40,7 @@ var App = function(){
     var names = self.db.collection('names').find().toArray(function(err, names) {
       console.log(names);
       var stream = mu.compileAndRender(self.mustacheTemplates + '/names.html', { "names" : names });
-      util.pump(stream, res);
+      stream.pipe(res);
     });
   };
 
