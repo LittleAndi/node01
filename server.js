@@ -49,7 +49,7 @@ var App = function(){
     var names = self.db.collection('names').find().toArray(function(err, names) {
       console.log(names);
       var stream = mu.compileAndRender(self.mustacheTemplates + '/names.html', { "names" : names });
-      util.pump(stream, res);
+      stream.pipe(res);
     });
   };
 
@@ -75,7 +75,7 @@ var App = function(){
     mu.clearCache();
     var names = self.db.collection('names').find().toArray(function(err, names) {
       var stream = mu.compileAndRender(self.mustacheTemplates + '/namesform.html', { "names" : names });
-      util.pump(stream, res);
+      stream.pipe(res);
     });
   };
 
@@ -109,7 +109,7 @@ var App = function(){
       collection.find().toArray(function(err, templates) {
         mu.clearCache();
         var stream = mu.compileAndRender(self.mustacheTemplates + '/templates.html', { "templates": templates });
-        util.pump(stream, res);
+        stream.pipe(res);
       });
     })
   };
@@ -135,12 +135,12 @@ var App = function(){
           if (template_edit != null) {
             mu.compileText(template_edit.template, template_edit.data, function(err, compiledEditTemplate) {
               var stream = mu.render(compiledEditTemplate, template);
-              util.pump(stream, res);
+              stream.pipe(res);
             });
           } else {
             // Template not found, using file
             var stream = mu.compileAndRender(self.mustacheTemplates + '/template_edit.html', template);
-            util.pump(stream, res);
+            stream.pipe(res);
           }
         });
 
@@ -216,7 +216,7 @@ var App = function(){
       collection.find().toArray(function(err, pages) {
         mu.clearCache();
         var stream = mu.compileAndRender(self.mustacheTemplates + '/pages.html', { "pages": pages });
-        util.pump(stream, res);
+        stream.pipe(res);
       });
     })
   };
@@ -262,12 +262,12 @@ var App = function(){
               if (page_edit != null) {
                 mu.compileText(page_edit.template, page_edit.data, function(err, compiledEditPage) {
                   var stream = mu.render(compiledEditPage, page);
-                  util.pump(stream, res);
+                  stream.pipe(res);
                 });
               } else {
                 // Template not found, using file
                 var stream = mu.compileAndRender(self.mustacheTemplates + '/page_edit.html', page);
-                util.pump(stream, res);
+                stream.pipe(res);
               }
             });
 
@@ -362,7 +362,7 @@ var App = function(){
                     }
 
                     var stream = mu.render(compiledTemplate, page);
-                    util.pump(stream, res);
+                    stream.pipe(res);
 
 
                     //console.log('Trying to render the template with the page.');
@@ -370,7 +370,7 @@ var App = function(){
 
                     //mu.compileText(page.pageId, pageTemlate, function(err, compiledPage) {
                     //  var stream = mu.render(compiledPage, page.data);
-                    //  util.pump(stream, res);
+                    //  stream.pipe(res);
                     //});
 
                   });
