@@ -4,6 +4,7 @@ var express = require('express');
 var fs      = require('fs');
 var mongodb = require('mongodb');
 var util    = require('util');
+var stream  = require('stream');
 var mu      = require('mu2');
 
 mu.root = process.env.OPENSHIFT_DATA_DIR + '/templates';
