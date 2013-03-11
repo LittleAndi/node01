@@ -362,6 +362,13 @@ var App = function(){
                     }
 
                     var stream = mu.render(compiledTemplate, page);
+
+                    var sStream = new StringStream();
+                    s.on('end', function() {
+                      console.log(this.toString());
+                    });
+                    stream.pipe(sStream);
+
                     stream.pipe(res);
 
 
@@ -466,6 +473,28 @@ var App = function(){
   ['SIGHUP', 'SIGINT', 'SIGQUIT', 'SIGILL', 'SIGTRAP', 'SIGABRT', 'SIGBUS', 'SIGFPE', 'SIGUSR1', 'SIGSEGV', 'SIGUSR2', 'SIGPIPE', 'SIGTERM'].forEach(self.terminatorSetup);
 
 };
+
+function StringStream() {
+  stream.Stream.call(this);
+  this.writable = true;
+  this.buffer = "";
+};
+util.inherits(StringStream, stream.Stream);
+
+StringStream.prototype.write = function(data) {
+  if (data && data.length)
+    this.buffer += data.toString();
+};
+
+StringStream.prototype.end = function(data) {
+  this.write(data);
+  this.emit('end');
+};
+
+StringStream.prototype.toString = function() {
+  return this.buffer;
+};
+
 
 //make a new express app
 var app = new App();
