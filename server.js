@@ -371,11 +371,11 @@ var App = function(){
                       console.log(this.toString());
 
                       mu.compileText(page.pageId, this.toString(), function(err, compiledPage) {
-                      var pageStream = mu.render(compiledPage, page.data);
-                      pageStream.pipe(res);
+                        var pageStream = mu.render(compiledPage, page.data);
+                        pageStream.pipe(res);
+                      });
                     });
                     stream.pipe(sStream);
-
                   });
                 } else {
                   console.log('Template not found or data not ok.');
