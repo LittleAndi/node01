@@ -378,7 +378,7 @@ var App = function(){
                           console.log(err);
                           res.send(err);
                         }
-                        var pageStream = mu.render(compiledPage, page.data);
+                        var pageStream = mu.render(compiledPage, JSON.parse(page.data));
                         pageStream.pipe(res);
                       });
                     });
