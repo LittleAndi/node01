@@ -369,8 +369,15 @@ var App = function(){
                     sStream.on('end', function() {
                       console.log('Trying to render the template with the page.');
                       console.log(this.toString());
+                      console.log(JSON.stringify(page.data));
 
+                      // Compile page template
                       mu.compileText(page.pageId, this.toString(), function(err, compiledPage) {
+                        if (err)
+                        {
+                          console.log(err);
+                          res.send(err);
+                        }
                         var pageStream = mu.render(compiledPage, page.data);
                         pageStream.pipe(res);
                       });
