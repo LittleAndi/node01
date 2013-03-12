@@ -378,7 +378,15 @@ var App = function(){
                           console.log(err);
                           res.send(err);
                         }
-                        var pageStream = mu.render(compiledPage, JSON.parse(page.data));
+
+                        // Create JSON object from page data string
+                        var pageData = JSON.parse(page.data);
+                        if (pageData == null)
+                        {
+                          pageData = {};
+                        }
+
+                        var pageStream = mu.render(compiledPage, pageData);
                         pageStream.pipe(res);
                       });
                     });
