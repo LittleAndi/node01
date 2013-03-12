@@ -364,22 +364,17 @@ var App = function(){
 
                     var stream = mu.render(compiledTemplate, page);
 
+                    // Convert stream to string
                     var sStream = new StringStream();
                     sStream.on('end', function() {
+                      console.log('Trying to render the template with the page.');
                       console.log(this.toString());
+
+                      mu.compileText(page.pageId, this.toString(), function(err, compiledPage) {
+                      var pageStream = mu.render(compiledPage, page.data);
+                      pageStream.pipe(res);
                     });
                     stream.pipe(sStream);
-
-                    stream.pipe(res);
-
-
-                    //console.log('Trying to render the template with the page.');
-                    //var pageTemlate = mu.render(compiledTemplate, page);
-
-                    //mu.compileText(page.pageId, pageTemlate, function(err, compiledPage) {
-                    //  var stream = mu.render(compiledPage, page.data);
-                    //  stream.pipe(res);
-                    //});
 
                   });
                 } else {
