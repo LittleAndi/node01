@@ -382,7 +382,7 @@ var App = function(){
                         // Create JSON object from page data string
                         var pageData;
                         try {
-                          JSON.parse(page.data);
+                          pageData = JSON.parse(page.data);
                           if (pageData == null)
                           {
                             pageData = {};
