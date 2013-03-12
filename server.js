@@ -380,14 +380,21 @@ var App = function(){
                         }
 
                         // Create JSON object from page data string
-                        var pageData = JSON.parse(page.data);
-                        if (pageData == null)
-                        {
-                          pageData = {};
+                        var pageData;
+                        try {
+                          JSON.parse(page.data);
+                          if (pageData == null)
+                          {
+                            pageData = {};
+                          }
+
+                          var pageStream = mu.render(compiledPage, pageData);
+                          pageStream.pipe(res);
+                        } catch(e) {
+                          console.log(e);
+                          res.send(e);
                         }
 
-                        var pageStream = mu.render(compiledPage, pageData);
-                        pageStream.pipe(res);
                       });
                     });
                     stream.pipe(sStream);
