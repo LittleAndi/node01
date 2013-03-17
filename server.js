@@ -316,6 +316,54 @@ var App = function(){
     });
   };
 
+  self.renderPage = function(page, template, req, res) {
+    mu.compileText(template.template, template.data, function(err, compiledTemplate) {
+      if (err)
+      {
+        console.log(err);
+        res.send(err);
+      }
+
+      var stream = mu.render(compiledTemplate, page);
+
+      // Convert stream to string
+      var sStream = new StringStream();
+      sStream.on('end', function() {
+        console.log('Trying to render the template with the page.');
+        console.log(this.toString());
+        console.log(JSON.stringify(page.data));
+
+        // Compile page template
+        mu.compileText(page.pageId, this.toString(), function(err, compiledPage) {
+          if (err)
+          {
+            console.log(err);
+            res.send(err);
+          }
+
+          // Create JSON object from page data string
+          var pageData;
+          try {
+            pageData = JSON.parse(page.data);
+            if (pageData == null)
+            {
+              pageData = {};
+            }
+
+            var pageStream = mu.render(compiledPage, pageData);
+            pageStream.pipe(res);
+          } catch(e) {
+            console.log(e);
+            res.send(e);
+          }
+
+        });
+      });
+      stream.pipe(sStream);
+    });
+
+  };
+
   self.routes['renderPage'] = function(req, res) {
     console.log('*** renderPage');
     console.log(req.route);
@@ -355,50 +403,8 @@ var App = function(){
                   console.log('Template found: ' + template.template);
                   //console.log(JSON.stringify(template));
 
-                  mu.compileText(template.template, template.data, function(err, compiledTemplate) {
-                    if (err)
-                    {
-                      console.log(err);
-                      res.send(err);
-                    }
-
-                    var stream = mu.render(compiledTemplate, page);
-
-                    // Convert stream to string
-                    var sStream = new StringStream();
-                    sStream.on('end', function() {
-                      console.log('Trying to render the template with the page.');
-                      console.log(this.toString());
-                      console.log(JSON.stringify(page.data));
-
-                      // Compile page template
-                      mu.compileText(page.pageId, this.toString(), function(err, compiledPage) {
-                        if (err)
-                        {
-                          console.log(err);
-                          res.send(err);
-                        }
-
-                        // Create JSON object from page data string
-                        var pageData;
-                        try {
-                          pageData = JSON.parse(page.data);
-                          if (pageData == null)
-                          {
-                            pageData = {};
-                          }
-
-                          var pageStream = mu.render(compiledPage, pageData);
-                          pageStream.pipe(res);
-                        } catch(e) {
-                          console.log(e);
-                          res.send(e);
-                        }
-
-                      });
-                    });
-                    stream.pipe(sStream);
-                  });
+                  self.renderPage(page, template, req, res);
+                  
                 } else {
                   console.log('Template not found or data not ok.');
                 }
