@@ -38,10 +38,10 @@ var App = function(){
   //self.routes['health'] = function(req, res){ res.send('1'); };
 
   self.routes['root'] = function(req, res) {
-    res.header("Content-Type", "text/html");
     var names = self.db.collection('names').find().toArray(function(err, names) {
       //console.log(names);
       var stream = mu.compileAndRender(self.mustacheTemplates + '/names.html', { "names" : names });
+      res.header("Content-Type", "text/html");
       stream.pipe(res);
     });
   };
@@ -51,6 +51,7 @@ var App = function(){
     var names = self.db.collection('names').find().toArray(function(err, names) {
       console.log(names);
       var stream = mu.compileAndRender(self.mustacheTemplates + '/names.html', { "names" : names });
+      res.header("Content-Type", "text/html");
       stream.pipe(res);
     });
   };
@@ -111,6 +112,7 @@ var App = function(){
       collection.find().toArray(function(err, templates) {
         mu.clearCache();
         var stream = mu.compileAndRender(self.mustacheTemplates + '/templates.html', { "templates": templates });
+        res.header("Content-Type", "text/html");
         stream.pipe(res);
       });
     })
@@ -137,11 +139,13 @@ var App = function(){
           if (template_edit != null) {
             mu.compileText(template_edit.template, template_edit.data, function(err, compiledEditTemplate) {
               var stream = mu.render(compiledEditTemplate, template);
+              res.header("Content-Type", "text/html");
               stream.pipe(res);
             });
           } else {
             // Template not found, using file
             var stream = mu.compileAndRender(self.mustacheTemplates + '/template_edit.html', template);
+            res.header("Content-Type", "text/html");
             stream.pipe(res);
           }
         });
@@ -218,6 +222,7 @@ var App = function(){
       collection.find().toArray(function(err, pages) {
         mu.clearCache();
         var stream = mu.compileAndRender(self.mustacheTemplates + '/pages.html', { "pages": pages });
+        res.header("Content-Type", "text/html");
         stream.pipe(res);
       });
     })
@@ -264,11 +269,13 @@ var App = function(){
               if (page_edit != null) {
                 mu.compileText(page_edit.template, page_edit.data, function(err, compiledEditPage) {
                   var stream = mu.render(compiledEditPage, page);
+                  res.header("Content-Type", "text/html");
                   stream.pipe(res);
                 });
               } else {
                 // Template not found, using file
                 var stream = mu.compileAndRender(self.mustacheTemplates + '/page_edit.html', page);
+                res.header("Content-Type", "text/html");
                 stream.pipe(res);
               }
             });
@@ -352,6 +359,7 @@ var App = function(){
             }
 
             var pageStream = mu.render(compiledPage, pageData);
+            res.header("Content-Type", "text/html");
             pageStream.pipe(res);
           } catch(e) {
             console.log(e);
@@ -415,6 +423,7 @@ var App = function(){
             // No template, just send page data
             console.log('Page has no template, sending raw data.');
 
+            res.header("Content-Type", "text/html");
             res.send(page.html);
           }
         } else {
