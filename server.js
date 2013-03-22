@@ -1,6 +1,5 @@
 #!/bin/env node
 
-
 var express = require('express');
 var fs      = require('fs');
 var mongodb = require('mongodb');
@@ -39,8 +38,9 @@ var App = function(){
   //self.routes['health'] = function(req, res){ res.send('1'); };
 
   self.routes['root'] = function(req, res) {
+    res.header("Content-Type", "text/html");
     var names = self.db.collection('names').find().toArray(function(err, names) {
-      console.log(names);
+      //console.log(names);
       var stream = mu.compileAndRender(self.mustacheTemplates + '/names.html', { "names" : names });
       stream.pipe(res);
     });
