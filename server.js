@@ -42,6 +42,7 @@ var App = function(){
       //console.log(names);
       var stream = mu.compileAndRender(self.mustacheTemplates + '/names.html', { "names" : names });
       res.header("Content-Type", "text/html");
+      res.header("Cache-Control", "max-age:10");
       stream.pipe(res);
     });
   };
